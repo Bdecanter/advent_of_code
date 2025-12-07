@@ -42,10 +42,18 @@ pub fn part2(data: &str) -> i32 {
     // we start at 50
     let mut state: i32 = 50;
     let mut nb_of_zero: i32 = 0;
+    let mut state_was_zero: bool = false;
 
     data.lines().enumerate().for_each(|(y, line)| {
         let l = line[1..].parse::<i32>().unwrap();
         println!("Line {}: State {} - {}", line, state, l);
+
+        if state == 0 {
+            state_was_zero = true;
+        } else {
+            state_was_zero = false;
+        }
+
         if line.chars().nth(0).unwrap() == 'L' {
             state = state - l;
 
@@ -62,15 +70,22 @@ pub fn part2(data: &str) -> i32 {
             if state > 99 {
                 state = state - 100;
                 println!("ok un tour");
-                nb_of_zero = nb_of_zero + 1;
+
+                if !state_was_zero {
+                    nb_of_zero = nb_of_zero + 1;
+                }
+
             }
 
             if state < 0 {
                 state = state + 100;
                 println!("ok un tour");
-                nb_of_zero = nb_of_zero + 1;
+                if !state_was_zero {
+                    nb_of_zero = nb_of_zero + 1;
+                }
             }
 
+            state_was_zero = false;
             // if state < 99 && state > 0 {
             //     continue
             // }
